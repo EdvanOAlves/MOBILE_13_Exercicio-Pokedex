@@ -2,6 +2,7 @@ package com.example.mobile_13_exercicio_pokedex.screens
 
 import android.R.attr.contentDescription
 import android.R.attr.label
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobile_13_exercicio_pokedex.R
 import com.example.mobile_13_exercicio_pokedex.components.PokemonCard
+import com.example.mobile_13_exercicio_pokedex.components.services.RetrofitFactory
+import com.example.mobile_13_exercicio_pokedex.model.PokemonEntry
+import com.example.mobile_13_exercicio_pokedex.model.PokemonListResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun StartScreen(modifier: Modifier = Modifier) {
@@ -44,7 +51,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
     val grayStroke:Color = Color(180,180,180)
 
     var searchState by remember { mutableStateOf("") }
-    var pokemons by remember { mutableStateOf(listOf("TODO", "TODO", "TODO")) }
+    var pokemons by remember { mutableStateOf(listOf<PokemonEntry>()) }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -87,7 +94,26 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 ) },
                 trailingIcon = {
                     IconButton(
-                        onClick = {/*TODO*/ }
+                        onClick = {
+                            var call = RetrofitFactory().getPokemonService().getPokemonList()
+
+                            call.enqueue(object: Callback<PokemonListResponse> {
+                                override fun onResponse(
+                                    call: Call<PokemonListResponse>,
+                                    response: Response<PokemonListResponse>
+                                ) {
+                                    Log.i("TESTE", "${ response.body()!!.results }")
+                                    pokemons = response.body()!!.results                                }
+
+                                override fun onFailure(
+                                    call: Call<PokemonListResponse>,
+                                    t: Throwable
+                                ) {
+                                    Log.i("TESTE", "${t.message}")
+                                }
+                            })
+
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
@@ -107,7 +133,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 columns = GridCells.Adaptive(150.dp)
             ) {
                 items(pokemons) {
-                    PokemonCard(it)
+//                    PokemonCard(it)
                 }
             }
         }
