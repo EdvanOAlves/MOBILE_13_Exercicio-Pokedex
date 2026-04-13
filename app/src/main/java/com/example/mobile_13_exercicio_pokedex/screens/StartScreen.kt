@@ -1,8 +1,5 @@
 package com.example.mobile_13_exercicio_pokedex.screens
 
-import android.R.attr.contentDescription
-import android.R.attr.label
-import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -43,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.mobile_13_exercicio_pokedex.R
 import com.example.mobile_13_exercicio_pokedex.components.PokemonCard
-import com.example.mobile_13_exercicio_pokedex.components.services.RetrofitFactory
+import com.example.mobile_13_exercicio_pokedex.services.RetrofitFactory
 import com.example.mobile_13_exercicio_pokedex.model.PokemonEntry
 import com.example.mobile_13_exercicio_pokedex.model.PokemonListResponse
 import retrofit2.Call
@@ -146,7 +143,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(pokemons) {
-                    PokemonCard(it)
+                    PokemonCard(it, {})
                 }
 
 //                items(25){

@@ -1,4 +1,4 @@
-package com.example.mobile_13_exercicio_pokedex.components.services
+package com.example.mobile_13_exercicio_pokedex.services
 
 import com.example.mobile_13_exercicio_pokedex.model.PokemonEntry
 import com.example.mobile_13_exercicio_pokedex.model.PokemonListResponse

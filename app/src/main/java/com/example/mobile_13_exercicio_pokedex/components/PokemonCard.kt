@@ -2,6 +2,7 @@ package com.example.mobile_13_exercicio_pokedex.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,9 +23,10 @@ import com.example.mobile_13_exercicio_pokedex.model.PokemonEntry
 import com.example.mobile_13_exercicio_pokedex.screens.lightRed
 
 @Composable
-fun PokemonCard(pokemon:PokemonEntry) {
+fun PokemonCard(pokemon:PokemonEntry, onClick: ()->Unit) {
     Card(modifier = Modifier
-        .background(Color.Transparent),
+        .background(Color.Transparent)
+        .clickable{onClick},
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(1.dp, color = lightRed)
     ) {

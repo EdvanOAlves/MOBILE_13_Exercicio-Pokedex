@@ -1,4 +1,4 @@
-package com.example.mobile_13_exercicio_pokedex.components.services
+package com.example.mobile_13_exercicio_pokedex.services
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
