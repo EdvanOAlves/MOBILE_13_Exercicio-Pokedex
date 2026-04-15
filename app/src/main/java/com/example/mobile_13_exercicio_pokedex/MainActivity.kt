@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            //https://pokeapi.co/api/v2/ referencia de rotas
             MOBILE_13_ExercicioPokedexTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 //                    StartScreen(modifier = Modifier.padding(innerPadding))
