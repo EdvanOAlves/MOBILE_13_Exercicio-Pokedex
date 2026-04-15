@@ -2,6 +2,10 @@ package com.example.mobile_13_exercicio_pokedex.screens
 
 import android.R.attr.contentDescription
 import android.R.attr.font
+import android.R.attr.fontWeight
+import android.R.attr.text
+import android.R.attr.x
+import android.icu.text.ListFormatter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +45,7 @@ import com.example.mobile_13_exercicio_pokedex.R
 import org.w3c.dom.Text
 
 val grassCol: Color = Color(60, 211, 94, 255)
+val grassColTransparent: Color = Color(60, 211, 94, 100)
 val textGray: Color = Color(150, 150, 150)
 
 @Composable
@@ -55,13 +61,13 @@ fun PokemonScreen(modifier: Modifier = Modifier) {
                 .height(244.dp)
                 .background(Color.Transparent)
                 .zIndex(2f)
-                .offset(y = -144.dp)
+                .offset(y = -180.dp)
         )
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(grassCol),
-            verticalArrangement = Arrangement.spacedBy(180.dp),
+            verticalArrangement = Arrangement.spacedBy(150.dp),
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
@@ -76,9 +82,9 @@ fun PokemonScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .background(Color.White)
                         .fillMaxSize()
-                        .padding(horizontal = 24.dp, vertical = 48.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 40.dp, bottom = 12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     //Types
                     Row(
@@ -94,26 +100,25 @@ fun PokemonScreen(modifier: Modifier = Modifier) {
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .height(72.dp),
+                            .height(64.dp),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
                         Measurement(
                             "Weight",
                             "6,9 kg",
-                            painterResource(R.drawable.weighticon)
+                            painterResource(R.drawable.weighticon),
+                            modifier = Modifier.fillMaxHeight()
                         )
                         VerticalDivider(thickness = 2.dp, color = textGray)
                         Measurement(
                             "Height",
                             "0,7 m",
-                            painterResource(R.drawable.heighticon)
+                            painterResource(R.drawable.heighticon),
+                            modifier = Modifier.fillMaxHeight()
                         )
                         VerticalDivider(thickness = 2.dp, color = textGray)
                         Abilities(listOf("Chlorophyll", "Overgrow"))
                     }
-
-                    //Stats
-
 
                     //Description
                     Text(
@@ -121,10 +126,22 @@ fun PokemonScreen(modifier: Modifier = Modifier) {
                         text = "There is a plant seed on its back right from the day this Pokémon is born. The seed slowly grows larger.",
                         color = Color.Black,
                         fontSize = 14.sp,
-
                     )
-                    DetailTitle(text ="Base Stats")
 
+                    //Stats
+                    DetailTitle(text = "Base Stats")
+
+                    Row(Modifier.fillMaxWidth()) {
+                        Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
+                            Stat(statName = "HP", 45)
+                            Stat(statName = "ATK", 49)
+                            Stat(statName = "DEF", 49)
+                            Stat(statName = "SATK", 65)
+                            Stat(statName = "SDEF", 65)
+                            Stat(statName = "SPD", 45)
+
+                        }
+                    }
 
                 }
             }
@@ -174,9 +191,10 @@ fun Type(modifier: Modifier = Modifier, text: String, color: Color) {
             )
             .padding(horizontal = 6.dp),
         text = text,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = Color.White
 
-        )
+    )
 
 }
 
@@ -185,8 +203,8 @@ fun DetailTitle(text: String) {
     Text(
         text = text,
         color = grassCol,
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Bold
+        fontSize = 20.sp,
+        fontWeight = FontWeight.ExtraBold
     )
 
 }
@@ -195,15 +213,18 @@ fun DetailTitle(text: String) {
 fun Measurement( //TODO: Criar o arquivo de componentes
     fieldName: String,
     fieldValue: String,
-    painter: Painter
+    painter: Painter,
+    modifier: Modifier
+
 ) {
     Column(
-        Modifier.fillMaxHeight(),
+        modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Image(
                 modifier = Modifier
                     .height(24.dp)
@@ -214,11 +235,14 @@ fun Measurement( //TODO: Criar o arquivo de componentes
             Text(fieldValue, color = Color.Black)
         }
         MeasurementName(fieldName)
+        //TODO: O alinhamento dos textos de medidas com o abilities ainda não tá 100%
     }
 }
+
 @Composable
-fun Abilities( //TODO: Criar o arquivo de componentes
-    abilities:List<String>,
+fun Abilities(
+    //TODO: Criar o arquivo de componentes
+    abilities: List<String>,
 ) {
     Column(
         Modifier.fillMaxHeight(),
@@ -237,4 +261,55 @@ fun MeasurementName(fieldName: String) {
         color = textGray,
         fontSize = 12.sp
     )
+}
+
+@Composable
+fun StatBar(stat: Int) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+
+    ) {
+        val fillPercentage: Float = stat.toFloat() / 255
+        Row(
+            Modifier
+                .width(250.dp)
+                .height(4.dp)
+                .background(grassColTransparent, shape = RoundedCornerShape(100)),
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth(fillPercentage)
+                    .background(grassCol, shape = RoundedCornerShape(100))
+            ) {
+                Text("coconut", color = Color(0, 0, 0, 0))
+            }
+
+        }
+    }
+}
+
+@Composable
+fun Stat(statName: String, stat: Int) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(
+            modifier = Modifier.width(36.dp),
+            text = statName,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = grassCol
+        )
+        Text(
+            text = stat.toString(),
+            color = Color.Black,
+            fontSize = 14.sp,
+        )
+
+        StatBar(stat)
+
+    }
+
+
 }
