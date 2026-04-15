@@ -1,6 +1,7 @@
 package com.example.mobile_13_exercicio_pokedex.screens
 
 import android.R.attr.contentDescription
+import android.R.attr.font
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,23 +26,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.mobile_13_exercicio_pokedex.R
 
 @Composable
 fun PokemonScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier
-        .padding(4.dp)
         .fillMaxSize()
+        .background(color = Color(60, 211, 94, 255)),
+        verticalArrangement = Arrangement.spacedBy(124.dp)
+
     ) {
-        PokemonScreenHeader()
+        PokemonScreenHeader(name = "Bulbasaur", entry = "#001")
         Card(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .background(Color.White),
+                    .background(Color.White)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AsyncImage(
@@ -49,6 +58,7 @@ fun PokemonScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .height(200.dp)
                         .background(Color.Transparent)
+                        .offset(y= -48.dp),
                 )
                 //Types
                 Row(
@@ -90,17 +100,16 @@ fun PokemonScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PokemonScreenHeader(modifier: Modifier = Modifier) {
+fun PokemonScreenHeader(name:String, entry:String) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(24.dp)
-            .background(Color(60, 211, 94))
+            .padding(12.dp)
         ,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row() {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(
                 onClick = {
                     /*TODO*/
@@ -111,9 +120,13 @@ fun PokemonScreenHeader(modifier: Modifier = Modifier) {
                     contentDescription = ""
                 )
             }
-            Text(text = "Bulbasaur")
+            Text(
+                text = name,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
-        Text(text = "#001")
+        Text(text = entry.toString())
     }
 }
 
